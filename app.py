@@ -95,6 +95,8 @@ def metar_text(row):
 
 @st.fragment(run_every=REFRESH_SECONDS)
 def page():
+    @st.fragment(run_every=REFRESH_SECONDS)
+def page():
     try:
         row = load_weather()
     except Exception as e:
@@ -105,30 +107,5 @@ def page():
     if metar:
         st.markdown(f'<div class="metar">{metar}</div>', unsafe_allow_html=True)
     else:
-        st.warning("The data has no 'ts' (timestamp) field, so no METAR could be built.")
-
-    ts = row.get("ts")
-    if isinstance(ts, (int, float)):
-        when = datetime.fromtimestamp(ts, ZoneInfo(TIMEZONE))
-        age = (datetime.now(ZoneInfo(TIMEZONE)) - when).total_seconds() / 60
-        st.markdown(f'<div class="note">Observation time: {when.strftime("%b %-d, %-I:%M %p")} '
-                    f'({age:.0f} min ago)</div>', unsafe_allow_html=True)
-
-    # Which fields the METAR needs, and whether they were found in the data
-    needed = {"temperature": ("temp", "temp_last"), "humidity": ("hum", "hum_last"),
-              "dew point (optional)": ("dew_point",),
-              "wind speed": ("wind_speed_last", "wind_speed_avg_last_10_min", "wind_speed"),
-              "wind direction": ("wind_dir_last", "wind_dir"),
-              "gust": ("wind_speed_hi_last_10_min", "wind_gust"),
-              "pressure": ("bar_sea_level", "bar_absolute", "bar")}
-    st.subheader("Field check")
-    for label, keys in needed.items():
-        found = [k for k in keys if isinstance(row.get(k), (int, float))]
-        st.write(("\u2705 " if found else "\u274c ") + f"**{label}**: "
-                 + (f"`{found[0]}` = {row[found[0]]}" if found else f"not found (looked for {', '.join(keys)})"))
-
-    with st.expander("Raw data from the weather station", expanded=False):
-        st.json(row)
-
-
+        st.warning("No timestamp in the weather data, so no METAR could be built.")
 page()
