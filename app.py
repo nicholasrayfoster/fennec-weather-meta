@@ -95,8 +95,6 @@ def metar_text(row):
 
 @st.fragment(run_every=REFRESH_SECONDS)
 def page():
-    @st.fragment(run_every=REFRESH_SECONDS)
-def page():
     try:
         row = load_weather()
     except Exception as e:
