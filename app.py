@@ -7,7 +7,7 @@ import requests
 import streamlit as st
 
 WEATHER_URL = "https://fennecweather.com/current"
-STATION_ID = "FNNC"            # label for the METAR line; change to your field's identifier
+STATION_ID = "LETU"            # label for the METAR line; change to your field's identifier
 TIMEZONE = "America/Chicago"
 REFRESH_SECONDS = 60
 
